@@ -6,15 +6,16 @@
 (function () {
   "use strict";
 
-  var META = 40;
   var STORAGE_KEY = "mus-contador-v1";
   var LANCES = ["Grande", "Chica", "Pares", "Juego", "Punto"];
+  var MAX_HISTORIAL = 30;
 
   // ---------- Iconos SVG (inline, para funcionar sin conexión) ----------
   var ICONS = {
     plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
     minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>',
     reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
+    undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H8"/></svg>',
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
     clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
   };
@@ -32,23 +33,32 @@
     ellos: 0,
     amarracosN: 0,
     amarracosE: 0,
+    meta: 40,            // objetivo de la partida: 30 o 40
+    nombreN: "Nosotros",
+    nombreE: "Ellos",
     pendientes: [],      // { id, lance, piedras }
     modalLance: null,    // nombre del lance con el sheet abierto
     modalPiedras: 2,     // valor del stepper en el sheet
-    ganador: null        // "nosotros" | "ellos" | null
+    ganador: null,       // "nosotros" | "ellos" | null
+    editando: null,      // "nosotros" | "ellos" | null (nombre en edición)
+    historial: []        // pila para deshacer la última jugada
   };
 
   function load() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
-      var saved = JSON.parse(raw);
-      state.nosotros = saved.nosotros || 0;
-      state.ellos = saved.ellos || 0;
-      state.amarracosN = saved.amarracosN || 0;
-      state.amarracosE = saved.amarracosE || 0;
-      state.pendientes = Array.isArray(saved.pendientes) ? saved.pendientes : [];
-      state.ganador = saved.ganador || null;
+      var s = JSON.parse(raw);
+      state.nosotros = s.nosotros || 0;
+      state.ellos = s.ellos || 0;
+      state.amarracosN = s.amarracosN || 0;
+      state.amarracosE = s.amarracosE || 0;
+      state.meta = (s.meta === 30 || s.meta === 40) ? s.meta : 40;
+      state.nombreN = s.nombreN || "Nosotros";
+      state.nombreE = s.nombreE || "Ellos";
+      state.pendientes = Array.isArray(s.pendientes) ? s.pendientes : [];
+      state.ganador = s.ganador || null;
+      state.historial = Array.isArray(s.historial) ? s.historial : [];
     } catch (e) {
       /* si algo falla, empezamos limpio */
     }
@@ -61,16 +71,51 @@
         ellos: state.ellos,
         amarracosN: state.amarracosN,
         amarracosE: state.amarracosE,
+        meta: state.meta,
+        nombreN: state.nombreN,
+        nombreE: state.nombreE,
         pendientes: state.pendientes,
-        ganador: state.ganador
+        ganador: state.ganador,
+        historial: state.historial
       }));
     } catch (e) { /* almacenamiento lleno o bloqueado */ }
   }
 
+  // ---------- Historial / deshacer ----------
+  // Guarda una foto de lo que cambia con una jugada, antes de aplicarla.
+  function snapshot() {
+    return {
+      nosotros: state.nosotros,
+      ellos: state.ellos,
+      amarracosN: state.amarracosN,
+      amarracosE: state.amarracosE,
+      pendientes: state.pendientes.map(function (p) {
+        return { id: p.id, lance: p.lance, piedras: p.piedras };
+      }),
+      ganador: state.ganador
+    };
+  }
+
+  function guardarJugada() {
+    state.historial.push(snapshot());
+    if (state.historial.length > MAX_HISTORIAL) state.historial.shift();
+  }
+
+  function deshacer() {
+    var prev = state.historial.pop();
+    if (!prev) return;
+    state.nosotros = prev.nosotros;
+    state.ellos = prev.ellos;
+    state.amarracosN = prev.amarracosN;
+    state.amarracosE = prev.amarracosE;
+    state.pendientes = prev.pendientes;
+    state.ganador = prev.ganador;
+  }
+
   // ---------- Lógica de juego ----------
   function comprobarMeta() {
-    if (state.nosotros >= META) state.ganador = "nosotros";
-    else if (state.ellos >= META) state.ganador = "ellos";
+    if (state.nosotros >= state.meta) state.ganador = "nosotros";
+    else if (state.ellos >= state.meta) state.ganador = "ellos";
   }
 
   function sumar(equipo, piedras) {
@@ -124,11 +169,23 @@
     state.pendientes = state.pendientes.filter(function (x) { return x.id !== id; });
   }
 
+  function setMeta(v) {
+    if (v !== 30 && v !== 40) return;
+    state.meta = v;
+    comprobarMeta(); // si ya se superó el nuevo objetivo, hay ganador
+  }
+
   // ---------- Utilidades de render ----------
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
+  }
+
+  // Abreviatura para los botones de asignar pendientes (Nosotros -> "Nos.")
+  function abrev(nombre) {
+    var base = nombre.trim().slice(0, 3);
+    return esc(base ? base + "." : "?");
   }
 
   function rayasHTML(value, color) {
@@ -157,6 +214,16 @@
     return html;
   }
 
+  function nameHTML(cfg) {
+    if (state.editando === cfg.team) {
+      return '<input id="name-input" class="name-input" type="text" maxlength="14" ' +
+        'autocomplete="off" spellcheck="false" value="' + esc(cfg.name) + '" ' +
+        'aria-label="Nombre del equipo" />';
+    }
+    return '<span class="name editable" data-action="editar" data-team="' + cfg.team +
+      '" title="Toca para renombrar">' + esc(cfg.name) + "</span>";
+  }
+
   function teamHTML(cfg) {
     var amarracos = cfg.amarracos > 0
       ? '<span class="amarracos" style="color:' + cfg.color + '">' + cfg.amarracos + "</span>"
@@ -164,7 +231,7 @@
     return '' +
       '<div class="team">' +
         '<div class="top">' +
-          '<span class="name">' + cfg.name + "</span>" +
+          nameHTML(cfg) +
           amarracos +
         "</div>" +
         '<div class="score-block">' +
@@ -185,8 +252,8 @@
         '<div class="chip">' +
           '<span style="color:var(--cream-dim)">' + ICONS.clock + "</span>" +
           '<span class="txt">' + esc(p.lance) + " · " + p.piedras + "</span>" +
-          '<button class="assign" data-action="asignar" data-id="' + p.id + '" data-team="nosotros" style="background:' + COLORS.gold + ';color:' + COLORS.bg + '">Nos.</button>' +
-          '<button class="assign" data-action="asignar" data-id="' + p.id + '" data-team="ellos" style="background:' + COLORS.wine + ';color:' + COLORS.bg + '">Ell.</button>' +
+          '<button class="assign" data-action="asignar" data-id="' + p.id + '" data-team="nosotros" style="background:' + COLORS.gold + ';color:' + COLORS.bg + '">' + abrev(state.nombreN) + "</button>" +
+          '<button class="assign" data-action="asignar" data-id="' + p.id + '" data-team="ellos" style="background:' + COLORS.wine + ';color:' + COLORS.bg + '">' + abrev(state.nombreE) + "</button>" +
         "</div>";
     }).join("");
     return '' +
@@ -231,13 +298,13 @@
   function winModalHTML() {
     if (!state.ganador) return "";
     var color = state.ganador === "nosotros" ? COLORS.gold : COLORS.wine;
-    var nombre = state.ganador === "nosotros" ? "Nosotros" : "Ellos";
+    var nombre = state.ganador === "nosotros" ? state.nombreN : state.nombreE;
     var nuevos = state.ganador === "nosotros" ? state.amarracosN + 1 : state.amarracosE + 1;
     return '' +
       '<div class="overlay center" style="background:rgba(0,0,0,0.7)">' +
         '<div class="win-card" style="border:1px solid ' + color + '">' +
           '<span class="kicker">Partida ganada</span>' +
-          '<span class="who" style="color:' + color + '">' + nombre + "</span>" +
+          '<span class="who" style="color:' + color + '">' + esc(nombre) + "</span>" +
           '<div class="count">' +
             '<span class="n" style="color:' + color + '">' + nuevos + "</span>" +
             '<span class="u">' + (nuevos === 1 ? "amarraco" : "amarracos") + "</span>" +
@@ -247,15 +314,26 @@
       "</div>";
   }
 
+  function metaToggleHTML() {
+    return '' +
+      '<div class="meta-toggle" role="group" aria-label="Puntos por partida">' +
+        '<button class="meta-opt' + (state.meta === 30 ? " active" : "") + '" data-action="meta" data-val="30">30</button>' +
+        '<button class="meta-opt' + (state.meta === 40 ? " active" : "") + '" data-action="meta" data-val="40">40</button>' +
+      "</div>";
+  }
+
   function render() {
-    var pctN = Math.min(100, (state.nosotros / META) * 100);
-    var pctE = Math.min(100, (state.ellos / META) * 100);
+    var pctN = Math.min(100, (state.nosotros / state.meta) * 100);
+    var pctE = Math.min(100, (state.ellos / state.meta) * 100);
+    var puedeDeshacer = state.historial.length > 0;
 
     var html = '' +
       '<div class="header">' +
         '<span class="brand">Mus</span>' +
         '<div class="right">' +
-          '<span class="meta-label">' + META + " pts</span>" +
+          metaToggleHTML() +
+          '<button class="icon-btn" data-action="undo" aria-label="Deshacer última jugada"' +
+            (puedeDeshacer ? "" : " disabled") + ' style="color:var(--cream-dim)">' + ICONS.undo + "</button>" +
           '<button class="icon-btn" data-action="reset" aria-label="Reiniciar" style="color:var(--cream-dim)">' + ICONS.reset + "</button>" +
         "</div>" +
       "</div>" +
@@ -266,9 +344,9 @@
       "</div>" +
 
       '<div class="board">' +
-        teamHTML({ team: "nosotros", name: "Nosotros", score: state.nosotros, amarracos: state.amarracosN, color: COLORS.gold }) +
+        teamHTML({ team: "nosotros", name: state.nombreN, score: state.nosotros, amarracos: state.amarracosN, color: COLORS.gold }) +
         '<div class="divider"><div class="rule"></div><span class="vs">VS</span></div>' +
-        teamHTML({ team: "ellos", name: "Ellos", score: state.ellos, amarracos: state.amarracosE, color: COLORS.wine }) +
+        teamHTML({ team: "ellos", name: state.nombreE, score: state.ellos, amarracos: state.amarracosE, color: COLORS.wine }) +
       "</div>" +
 
       pendientesHTML() +
@@ -277,7 +355,35 @@
       winModalHTML();
 
     document.getElementById("app").innerHTML = html;
+    setupEditInput();
     save();
+  }
+
+  // Prepara el input de edición de nombre tras cada render.
+  function setupEditInput() {
+    if (!state.editando) return;
+    var input = document.getElementById("name-input");
+    if (!input) return;
+    input.focus();
+    input.select();
+
+    var done = false;
+    function commit(guardar) {
+      if (done) return;
+      done = true;
+      if (guardar) {
+        var v = input.value.trim();
+        if (state.editando === "nosotros") state.nombreN = v || "Nosotros";
+        else state.nombreE = v || "Ellos";
+      }
+      state.editando = null;
+      render();
+    }
+    input.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter") { ev.preventDefault(); commit(true); }
+      else if (ev.key === "Escape") { ev.preventDefault(); commit(false); }
+    });
+    input.addEventListener("blur", function () { commit(true); });
   }
 
   // ---------- Eventos (delegación) ----------
@@ -288,13 +394,25 @@
 
     switch (action) {
       case "add":
+        guardarJugada();
         sumar(target.getAttribute("data-team"), 1);
         break;
       case "sub":
+        guardarJugada();
         restar(target.getAttribute("data-team"));
         break;
       case "asignar":
+        guardarJugada();
         asignarPendiente(Number(target.getAttribute("data-id")), target.getAttribute("data-team"));
+        break;
+      case "undo":
+        deshacer();
+        break;
+      case "meta":
+        setMeta(Number(target.getAttribute("data-val")));
+        break;
+      case "editar":
+        state.editando = target.getAttribute("data-team");
         break;
       case "lance":
         state.modalLance = target.getAttribute("data-lance");
@@ -307,6 +425,7 @@
         state.modalPiedras = state.modalPiedras + 1;
         break;
       case "confirmar-envite":
+        guardarJugada();
         confirmarEnvite();
         break;
       case "close-sheet":
@@ -315,11 +434,14 @@
         state.modalLance = null;
         break;
       case "confirmar-amarraco":
+        guardarJugada();
         confirmarAmarraco();
         break;
       case "reset":
-        if (confirm("¿Reiniciar todo el marcador (partida y amarracos)?")) resetTodo();
-        else return;
+        if (confirm("¿Reiniciar todo el marcador (partida y amarracos)?")) {
+          guardarJugada();
+          resetTodo();
+        } else return;
         break;
       default:
         return;
