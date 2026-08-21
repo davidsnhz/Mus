@@ -1,13 +1,16 @@
 /* Mus · Contador — estilos (sin dependencias, todo local para funcionar offline) */
 
 :root {
-  --bg: #171F1C;
-  --bg-soft: #1E2A25;
-  --line: #2E3B34;
-  --cream: #EDE6D6;
-  --cream-dim: #A9A79A;
-  --gold: #C9A15A;
-  --wine: #A94B4B;
+  --bg: #000000;          /* fondo: negro total */
+  --bg-soft: #101010;     /* tarjetas y superficies (casi negro) */
+  --line: #2A2A2A;        /* separadores / bordes */
+  --cream: #FFFFFF;       /* texto principal: blanco */
+  --cream-dim: #C9C9C9;   /* texto secundario: gris muy claro (legible) */
+  --gold: #00CEF2;        /* equipo "Nosotros" (cian) */
+  --gold-dark: #007188;   /* "Nosotros" restar (cian oscuro) */
+  --wine: #F22300;        /* equipo "Ellos" (rojo) */
+  --wine-dark: #8A1400;   /* "Ellos" restar (rojo oscuro) */
+  --meta-active: #767676; /* selector 30/40 activo (gris medio) */
 
   /* Fuentes del sistema (sin CDN, para que funcione sin wifi) */
   --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -116,8 +119,8 @@ button {
   transition: color 0.15s, background 0.15s;
 }
 .meta-opt.active {
-  background: var(--gold);
-  color: var(--bg);
+  background: var(--meta-active);
+  color: #fff;
 }
 
 /* ---------- Barra de progreso ---------- */
@@ -159,8 +162,8 @@ button {
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-weight: 500;
-  color: var(--cream-dim);
+  font-weight: 600;
+  color: var(--cream);
 }
 .team .name.editable {
   cursor: pointer;
@@ -184,7 +187,7 @@ button {
   font-weight: 600;
   color: var(--cream);
   background: var(--bg-soft);
-  border: 1px solid var(--gold);
+  border: 1px solid #666;
   border-radius: 8px;
   padding: 5px 8px;
   outline: none;
@@ -228,8 +231,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-soft);
-  border: 1px solid var(--line);
+  border: none;
+  /* el color de fondo (versión oscura del equipo) lo pone el JS en línea */
   transition: transform 0.08s;
 }
 .btn-add {

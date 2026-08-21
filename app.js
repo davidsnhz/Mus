@@ -21,10 +21,12 @@
   };
 
   var COLORS = {
-    bg: "#171F1C",
-    gold: "#C9A15A",
-    wine: "#A94B4B",
-    creamDim: "#A9A79A"
+    bg: "#000000",
+    gold: "#00CEF2",      // Nosotros · sumar (cian)
+    goldDark: "#007188",  // Nosotros · restar (cian oscuro)
+    wine: "#F22300",      // Ellos · sumar (rojo)
+    wineDark: "#8A1400",  // Ellos · restar (rojo oscuro)
+    creamDim: "#C9C9C9"
   };
 
   // ---------- Estado ----------
@@ -239,7 +241,7 @@
           rayasHTML(cfg.score, cfg.color) +
         "</div>" +
         '<div class="controls">' +
-          '<button class="btn-sub" data-action="sub" data-team="' + cfg.team + '" aria-label="Restar" style="color:var(--cream-dim)">' + ICONS.minus + "</button>" +
+          '<button class="btn-sub" data-action="sub" data-team="' + cfg.team + '" aria-label="Restar" style="background:' + cfg.colorDark + ';color:#fff">' + ICONS.minus + "</button>" +
           '<button class="btn-add" data-action="add" data-team="' + cfg.team + '" aria-label="Sumar" style="background:' + cfg.color + ';color:' + COLORS.bg + '">' + ICONS.plus + "</button>" +
         "</div>" +
       "</div>";
@@ -344,9 +346,9 @@
       "</div>" +
 
       '<div class="board">' +
-        teamHTML({ team: "nosotros", name: state.nombreN, score: state.nosotros, amarracos: state.amarracosN, color: COLORS.gold }) +
+        teamHTML({ team: "nosotros", name: state.nombreN, score: state.nosotros, amarracos: state.amarracosN, color: COLORS.gold, colorDark: COLORS.goldDark }) +
         '<div class="divider"><div class="rule"></div><span class="vs">VS</span></div>' +
-        teamHTML({ team: "ellos", name: state.nombreE, score: state.ellos, amarracos: state.amarracosE, color: COLORS.wine }) +
+        teamHTML({ team: "ellos", name: state.nombreE, score: state.ellos, amarracos: state.amarracosE, color: COLORS.wine, colorDark: COLORS.wineDark }) +
       "</div>" +
 
       pendientesHTML() +
