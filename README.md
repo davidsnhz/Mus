@@ -22,26 +22,7 @@ service-worker.js       Cache offline
 icons/                  Iconos de la app (192, 512, maskable)
 ```
 
-## Cómo publicarla (para pasar el enlace a tus amigos)
-
-Cualquiera con el link entra y la usa; nadie tiene que instalar nada para jugar.
-Necesita **HTTPS** para que funcione la instalación y el modo offline — Vercel y Netlify lo dan gratis.
-
-### Opción A — Netlify (lo más rápido, sin cuenta técnica)
-
-1. Entra en https://app.netlify.com/drop
-2. Arrastra **la carpeta `Mus` entera** a la zona que dice "Drag and drop".
-3. Te da una URL tipo `https://algo-al-azar.netlify.app`. Ese es el enlace que compartes.
-
-### Opción B — Vercel
-
-1. Instala una vez: `npm i -g vercel` (o usa la web subiendo la carpeta a un repo de GitHub).
-2. Desde la carpeta: `vercel` y sigue los pasos. Al terminar te da la URL pública.
-
-> No hay paso de compilación: son archivos estáticos. En Vercel, si te pregunta por
-> "build command", déjalo vacío y pon la carpeta raíz como directorio de salida.
-
-## Cómo la instalan tus amigos en el móvil
+## Cómo instalarla en el móvil
 
 Al abrir el enlace en el móvil:
 
