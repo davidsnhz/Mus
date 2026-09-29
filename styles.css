@@ -12,9 +12,8 @@
   --wine-dark: #8A1400;   /* "Ellos" restar (rojo oscuro) */
   --meta-active: #767676; /* selector 30/40 activo (gris medio) */
 
-  /* Fuentes del sistema (sin CDN, para que funcione sin wifi) */
+  /* Fuente del sistema (sin CDN, para que funcione sin wifi) */
   --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-num: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
 }
 
 * {
@@ -77,12 +76,6 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-.meta-label {
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--cream-dim);
 }
 .icon-btn {
   width: 32px;
