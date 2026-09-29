@@ -25,8 +25,7 @@
     gold: "#00CEF2",      // Nosotros · sumar (cian)
     goldDark: "#007188",  // Nosotros · restar (cian oscuro)
     wine: "#F22300",      // Ellos · sumar (rojo)
-    wineDark: "#8A1400",  // Ellos · restar (rojo oscuro)
-    creamDim: "#C9C9C9"
+    wineDark: "#8A1400"   // Ellos · restar (rojo oscuro)
   };
 
   // ---------- Estado ----------

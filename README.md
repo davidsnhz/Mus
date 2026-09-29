@@ -1,52 +1,44 @@
-# Mus · Contador
+# Mus
 
-Marcador de mus para la mesa. **PWA instalable**, funciona **sin conexión** una vez cargada,
-guarda la partida en el navegador y se ve bien en cualquier móvil. Sin build, sin dependencias.
+una app para llevar la cuenta de las partidas de mus con los colegas. la hice
+para no andar con papelitos ni piedras por la mesa: la abres en el movil y a jugar.
 
-## Qué hace
+funciona sin internet una vez la has abierto la primera vez, asi que en el bar o
+donde sea da igual que no haya cobertura. y se instala en la pantalla de inicio
+como si fuera una app normal.
 
-- **Marcador Nosotros / Ellos** con las rayas tradicionales (grupos de 5).
-- **Envites pendientes** ("de últimas"): dejas un envite en espera y, al ver, lo asignas a un equipo.
-- **Meta 40 puntos**: al llegar, se anota un amarraco y empieza otra partida.
-- **Se guarda solo** en `localStorage`: si cierras el navegador a media partida, al volver sigue igual.
-- **Botón de reinicio** (pide confirmación) para borrar partida y amarracos.
+**pruebala aqui:** https://mus-contador.vercel.app
 
-## Archivos
+## que hace
 
-```
-index.html              Página principal
-app.js                  Lógica y render (JS puro)
-styles.css              Estilos
-manifest.webmanifest    Datos de la PWA (nombre, iconos, colores)
-service-worker.js       Cache offline
-icons/                  Iconos de la app (192, 512, maskable)
-```
+- marcador de los dos equipos (nosotros / ellos) con las rayas de toda la vida
+- le pones la meta a 30 o 40, la que jugueis
+- cuando un equipo llega a la meta se anota el amarraco y empieza otra partida sola
+- los envites que se dejan "de ultimas" los apuntas y luego se los das al que los gane
+- boton de ordago: si le das (y confirmas) ese equipo gana la partida directa
+- si te equivocas, con deshacer vuelves atras
+- para cambiar el nombre de un equipo, tocas encima del nombre y ya
+- se guarda todo solo, si cierras el movil a media partida al volver sigue igual
 
-## Cómo instalarla en el móvil
+## como instalarla en el movil
 
-Al abrir el enlace en el móvil:
+abres https://mus-contador.vercel.app y:
 
-- **Android (Chrome):** menú ⋮ → **"Añadir a pantalla de inicio"** / "Instalar app".
-- **iPhone (Safari):** botón **Compartir** → **"Añadir a pantalla de inicio"**.
+- **android (chrome):** menu de los tres puntos, añadir a pantalla de inicio
+- **iphone (safari):** el boton de compartir, añadir a pantalla de inicio
 
-Una vez añadida, se abre a pantalla completa y **funciona aunque no haya wifi ni datos**
-(hay que abrirla con conexión **la primera vez** para que se guarde).
+la primera vez tienes que abrirla con internet para que se guarde, despues ya
+tira sin conexion.
 
-## Probarla en local (opcional)
+## por dentro
 
-Los service workers necesitan `http(s)`, no valen abriendo el `index.html` directamente.
-Con cualquier servidor estático, por ejemplo:
+nada raro, es html, css y javascript a pelo, sin frameworks ni cosas que compilar:
 
-```bash
-npx serve .
-```
+- index.html — la pagina
+- app.js — toda la logica
+- styles.css — los estilos
+- manifest.webmanifest — datos de la pwa (nombre, iconos, colores)
+- service-worker.js — lo que hace que funcione sin internet
+- icons/ — los iconos
 
-y abre la URL que te indique.
-
-## Actualizar la app
-
-Si cambias algún archivo, sube el número de versión en dos sitios para que a todos
-se les actualice la copia guardada:
-
-- `service-worker.js` → `var CACHE = "mus-contador-v1";` (pon `-v2`, etc.)
-- El nombre de la caché nuevo hace que se borre la antigua al recargar.
+esta en vercel: cada vez que subo un cambio a github se actualiza sola.
