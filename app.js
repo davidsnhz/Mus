@@ -43,6 +43,7 @@
     modalPiedras: 2,     // valor del stepper en el sheet
     ganador: null,       // "nosotros" | "ellos" | null
     editando: null,      // "nosotros" | "ellos" | null (nombre en edición)
+    ordagoTeam: null,    // "nosotros" | "ellos" | null (confirmación de órdago abierta)
     historial: []        // pila para deshacer la última jugada
   };
 
@@ -240,9 +241,12 @@
           '<span class="score tabnum">' + cfg.score + "</span>" +
           rayasHTML(cfg.score, cfg.color) +
         "</div>" +
-        '<div class="controls">' +
-          '<button class="btn-sub" data-action="sub" data-team="' + cfg.team + '" aria-label="Restar" style="background:' + cfg.colorDark + ';color:#fff">' + ICONS.minus + "</button>" +
-          '<button class="btn-add" data-action="add" data-team="' + cfg.team + '" aria-label="Sumar" style="background:' + cfg.color + ';color:' + COLORS.bg + '">' + ICONS.plus + "</button>" +
+        '<div class="actions">' +
+          '<div class="controls">' +
+            '<button class="btn-sub" data-action="sub" data-team="' + cfg.team + '" aria-label="Restar" style="background:' + cfg.colorDark + ';color:#fff">' + ICONS.minus + "</button>" +
+            '<button class="btn-add" data-action="add" data-team="' + cfg.team + '" aria-label="Sumar" style="background:' + cfg.color + ';color:' + COLORS.bg + '">' + ICONS.plus + "</button>" +
+          "</div>" +
+          '<button class="ordago-btn" data-action="ordago" data-team="' + cfg.team + '" style="border-color:' + cfg.color + ';color:' + cfg.color + '">Órdago</button>' +
         "</div>" +
       "</div>";
   }
@@ -316,6 +320,24 @@
       "</div>";
   }
 
+  function ordagoConfirmHTML() {
+    if (!state.ordagoTeam) return "";
+    var color = state.ordagoTeam === "nosotros" ? COLORS.gold : COLORS.wine;
+    var nombre = state.ordagoTeam === "nosotros" ? state.nombreN : state.nombreE;
+    return '' +
+      '<div class="overlay center" style="background:rgba(0,0,0,0.75)">' +
+        '<div class="win-card" style="border:1px solid ' + color + '">' +
+          '<span class="kicker">Órdago</span>' +
+          '<span class="who" style="color:' + color + ';margin-bottom:12px">' + esc(nombre) + "</span>" +
+          '<p class="confirm-msg">Si ' + esc(nombre) + ' gana el órdago, se lleva la partida entera. ¿Confirmas?</p>' +
+          '<div class="confirm-actions">' +
+            '<button class="btn-ghost" data-action="ordago-cancel">Cancelar</button>' +
+            '<button class="primary-btn" data-action="ordago-confirm" style="background:' + color + '">Órdago ganado</button>' +
+          "</div>" +
+        "</div>" +
+      "</div>";
+  }
+
   function metaToggleHTML() {
     return '' +
       '<div class="meta-toggle" role="group" aria-label="Puntos por partida">' +
@@ -354,6 +376,7 @@
       pendientesHTML() +
       lancesHTML() +
       enviteSheetHTML() +
+      ordagoConfirmHTML() +
       winModalHTML();
 
     document.getElementById("app").innerHTML = html;
@@ -415,6 +438,18 @@
         break;
       case "editar":
         state.editando = target.getAttribute("data-team");
+        break;
+      case "ordago":
+        // Abre la confirmación; el órdago no gana hasta confirmar (evita toques sin querer).
+        state.ordagoTeam = target.getAttribute("data-team");
+        break;
+      case "ordago-cancel":
+        state.ordagoTeam = null;
+        break;
+      case "ordago-confirm":
+        guardarJugada();
+        state.ganador = state.ordagoTeam; // ese equipo gana la partida directamente
+        state.ordagoTeam = null;
         break;
       case "lance":
         state.modalLance = target.getAttribute("data-lance");
