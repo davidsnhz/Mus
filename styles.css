@@ -533,6 +533,25 @@ button {
 .confirm-actions .btn-ghost:active { transform: scale(0.98); }
 .confirm-actions .primary-btn { width: auto; flex: 1; }
 
+/* ---------- Pie con enlaces legales ---------- */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+}
+.footer a {
+  color: var(--cream-dim);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer a:hover,
+.footer a:active { color: var(--cream); }
+.footer .dot { color: var(--cream-dim); }
+
 /* Utilidad: ocultar scrollbar horizontal en móvil */
 .pendientes::-webkit-scrollbar,
 .lances::-webkit-scrollbar { height: 0; }

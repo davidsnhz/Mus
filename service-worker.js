@@ -3,7 +3,7 @@
  * Sube el número de versión al cambiar archivos para forzar actualización.
  */
 
-var CACHE = "mus-contador-v4";
+var CACHE = "mus-contador-v5";
 
 var ASSETS = [
   "./",
@@ -11,6 +11,8 @@ var ASSETS = [
   "./styles.css",
   "./app.js",
   "./manifest.webmanifest",
+  "./privacidad.html",
+  "./terminos.html",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png"

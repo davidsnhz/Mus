@@ -337,6 +337,15 @@
       "</div>";
   }
 
+  function footerHTML() {
+    return '' +
+      '<div class="footer">' +
+        '<a href="./privacidad.html">Privacidad</a>' +
+        '<span class="dot">·</span>' +
+        '<a href="./terminos.html">Términos</a>' +
+      "</div>";
+  }
+
   function metaToggleHTML() {
     return '' +
       '<div class="meta-toggle" role="group" aria-label="Puntos por partida">' +
@@ -374,6 +383,7 @@
 
       pendientesHTML() +
       lancesHTML() +
+      footerHTML() +
       enviteSheetHTML() +
       ordagoConfirmHTML() +
       winModalHTML();
