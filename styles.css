@@ -67,11 +67,29 @@ button {
   padding: 14px 20px;
   border-bottom: 1px solid var(--line);
 }
+.header .brand-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .header .brand {
   font-size: 15px;
   font-weight: 600;
   color: var(--cream);
 }
+.settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--cream-dim);
+  background: transparent;
+  transition: transform 0.08s, color 0.15s;
+}
+.settings-btn svg { width: 17px; height: 17px; }
+.settings-btn:hover, .settings-btn:active { color: var(--cream); }
+.settings-btn:active { transform: scale(0.9); }
 .header .right {
   display: flex;
   align-items: center;
@@ -533,24 +551,52 @@ button {
 .confirm-actions .btn-ghost:active { transform: scale(0.98); }
 .confirm-actions .primary-btn { width: auto; flex: 1; }
 
-/* ---------- Pie con enlaces legales ---------- */
-.footer {
+/* ---------- Panel de ajustes ---------- */
+.settings-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0 20px;
+}
+.settings-label { font-size: 14px; color: var(--cream); }
+.share-btn {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 16px;
-  border-top: 1px solid var(--line);
-  font-size: 11px;
+  padding: 14px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--cream);
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.08s;
 }
-.footer a {
-  color: var(--cream-dim);
+.share-btn svg { width: 18px; height: 18px; }
+.share-btn:active { transform: scale(0.98); }
+.settings-links {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.settings-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 2px;
+  color: var(--cream);
   text-decoration: none;
+  font-size: 15px;
+  border-bottom: 1px solid var(--line);
   transition: color 0.15s;
 }
-.footer a:hover,
-.footer a:active { color: var(--cream); }
-.footer .dot { color: var(--cream-dim); }
+.settings-links a:last-child { border-bottom: none; }
+.settings-links a span { color: var(--cream-dim); font-size: 20px; }
+.settings-links a:hover, .settings-links a:active { color: var(--cream-dim); }
 
 /* Utilidad: ocultar scrollbar horizontal en móvil */
 .pendientes::-webkit-scrollbar,
