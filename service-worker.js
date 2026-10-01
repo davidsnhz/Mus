@@ -3,7 +3,7 @@
  * Sube el número de versión al cambiar archivos para forzar actualización.
  */
 
-var CACHE = "mus-contador-v5";
+var CACHE = "mus-contador-v7";
 
 var ASSETS = [
   "./",
