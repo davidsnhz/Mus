@@ -552,6 +552,11 @@ button {
 .confirm-actions .primary-btn { width: auto; flex: 1; }
 
 /* ---------- Panel de ajustes ---------- */
+.settings-sub {
+  margin: 0 0 20px;
+  font-size: 12px;
+  color: var(--cream-dim);
+}
 .settings-group {
   display: flex;
   align-items: center;
