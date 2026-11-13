@@ -386,7 +386,7 @@
             '<span class="title">Ajustes</span>' +
             '<button class="close" data-action="close-settings" aria-label="Cerrar" style="color:var(--cream-dim)">' + ICONS.x + "</button>" +
           "</div>" +
-          '<p class="settings-sub">Amarraco · marcador de mus</p>' +
+          '<p class="settings-sub">Mus · marcador para la mesa</p>' +
           '<div class="settings-group">' +
             '<span class="settings-label">Puntos por partida</span>' +
             metaToggleHTML() +
@@ -416,7 +416,7 @@
     var html = '' +
       '<div class="header">' +
         '<div class="brand-group">' +
-          '<span class="brand">Amarraco</span>' +
+          '<span class="brand">Mus</span>' +
           '<button class="settings-btn" data-action="settings" aria-label="Ajustes">' + ICONS.settings + "</button>" +
         "</div>" +
         '<div class="right">' +
