@@ -1,6 +1,6 @@
 {
-  "name": "Amarraco · Marcador de mus",
-  "short_name": "Amarraco",
+  "name": "Mus · Marcador para la mesa",
+  "short_name": "Mus",
   "description": "Marcador de mus para la mesa. Funciona sin conexión.",
   "start_url": "./index.html",
   "scope": "./",
