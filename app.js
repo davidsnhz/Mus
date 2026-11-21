@@ -401,6 +401,7 @@
             '<a href="./como-se-apunta-el-mus.html">Cómo se apunta el mus<span aria-hidden="true">&rsaquo;</span></a>' +
             '<a href="./privacidad.html">Privacidad<span aria-hidden="true">&rsaquo;</span></a>' +
             '<a href="./terminos.html">Términos de uso<span aria-hidden="true">&rsaquo;</span></a>' +
+            '<a href="./aviso-legal.html">Aviso legal<span aria-hidden="true">&rsaquo;</span></a>' +
           "</nav>" +
         "</div>" +
       "</div>";
