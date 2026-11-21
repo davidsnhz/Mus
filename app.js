@@ -396,6 +396,7 @@
           "</div>" +
           '<button class="share-btn" data-action="share">' + ICONS.share + " Compartir la app</button>" +
           '<nav class="settings-links">' +
+            '<a href="./como-se-apunta-el-mus.html">Cómo se apunta el mus<span aria-hidden="true">&rsaquo;</span></a>' +
             '<a href="./privacidad.html">Privacidad<span aria-hidden="true">&rsaquo;</span></a>' +
             '<a href="./terminos.html">Términos de uso<span aria-hidden="true">&rsaquo;</span></a>' +
           "</nav>" +
