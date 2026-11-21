@@ -204,7 +204,7 @@
     var url = location.origin + location.pathname;
     if (navigator.share) {
       navigator.share({
-        title: "Mus · Contador",
+        title: "Mus",
         text: "Marcador de mus gratis, se instala y funciona sin conexión:",
         url: url
       }).catch(function () {});
@@ -319,7 +319,7 @@
     if (!state.modalLance) return "";
     return '' +
       '<div class="overlay bottom" data-action="close-sheet">' +
-        '<div class="sheet" data-stop="1">' +
+        '<div class="sheet" data-stop="1" data-anim="envite">' +
           '<div class="row">' +
             '<span class="title">Envite · ' + esc(state.modalLance) + "</span>" +
             '<button class="close" data-action="close-sheet" aria-label="Cerrar" style="color:var(--cream-dim)">' + ICONS.x + "</button>" +
@@ -347,7 +347,7 @@
     var nuevos = state.ganador === "nosotros" ? state.amarracosN + 1 : state.amarracosE + 1;
     return '' +
       '<div class="overlay center" style="background:rgba(0,0,0,0.7)">' +
-        '<div class="win-card" style="border:1px solid ' + color + '">' +
+        '<div class="win-card" data-anim="win" style="border:1px solid ' + color + '">' +
           '<span class="kicker">Partida ganada</span>' +
           '<span class="who" style="color:' + color + '">' + esc(nombre) + "</span>" +
           '<div class="count">' +
@@ -355,6 +355,9 @@
             '<span class="u">' + (nuevos === 1 ? "amarraco" : "amarracos") + "</span>" +
           "</div>" +
           '<button class="primary-btn" data-action="confirmar-amarraco" style="background:' + color + '">Anotar amarraco y seguir</button>' +
+          (state.historial.length > 0
+            ? '<button class="win-undo" data-action="undo">' + ICONS.undo + " Deshacer</button>"
+            : "") +
         "</div>" +
       "</div>";
   }
@@ -365,7 +368,7 @@
     var nombre = state.ordagoTeam === "nosotros" ? state.nombreN : state.nombreE;
     return '' +
       '<div class="overlay center" style="background:rgba(0,0,0,0.75)">' +
-        '<div class="win-card" style="border:1px solid ' + color + '">' +
+        '<div class="win-card" data-anim="ordago" style="border:1px solid ' + color + '">' +
           '<span class="kicker">Órdago</span>' +
           '<span class="who" style="color:' + color + ';margin-bottom:12px">' + esc(nombre) + "</span>" +
           '<p class="confirm-msg">Si ' + esc(nombre) + ' gana el órdago, se lleva la partida entera. ¿Confirmas?</p>' +
@@ -381,7 +384,7 @@
     if (!state.settingsOpen) return "";
     return '' +
       '<div class="overlay bottom" data-action="close-settings">' +
-        '<div class="sheet" data-stop="1">' +
+        '<div class="sheet" data-stop="1" data-anim="settings">' +
           '<div class="row">' +
             '<span class="title">Ajustes</span>' +
             '<button class="close" data-action="close-settings" aria-label="Cerrar" style="color:var(--cream-dim)">' + ICONS.x + "</button>" +
@@ -444,7 +447,17 @@
       ordagoConfirmHTML() +
       winModalHTML();
 
-    document.getElementById("app").innerHTML = html;
+    // Las ventanas que ya estaban abiertas no repiten la animación de entrada
+    // (p. ej. al tocar + / − de las piedras del envite).
+    var app = document.getElementById("app");
+    var yaAbiertas = {};
+    app.querySelectorAll("[data-anim]").forEach(function (el) {
+      yaAbiertas[el.getAttribute("data-anim")] = true;
+    });
+    app.innerHTML = html;
+    app.querySelectorAll("[data-anim]").forEach(function (el) {
+      if (yaAbiertas[el.getAttribute("data-anim")]) el.style.animation = "none";
+    });
     setupEditInput();
     save();
   }
@@ -477,10 +490,23 @@
   }
 
   // ---------- Eventos (delegación) ----------
+  // Acciones que abren/cierran ventanas o mueven botones de sitio. Justo después
+  // ignoramos toques un momento, para que un doble toque no caiga en el botón
+  // que aparece debajo (p. ej. "Órdago ganado" -> "Anotar amarraco").
+  var CAMBIAN_PANTALLA = {
+    asignar: 1, lance: 1, "confirmar-envite": 1, "close-sheet": 1,
+    settings: 1, "close-settings": 1, ordago: 1, "ordago-cancel": 1,
+    "ordago-confirm": 1, "confirmar-amarraco": 1, editar: 1, reset: 1
+  };
+  var BLOQUEO_MS = 400;
+  var bloqueoHasta = 0;
+
   function onClick(e) {
     var target = e.target.closest("[data-action]");
     if (!target) return;
     var action = target.getAttribute("data-action");
+    if (Date.now() < bloqueoHasta) return;
+    var habiaGanador = !!state.ganador;
 
     pedirWakeLock(); // en el primer toque se activa (algunos navegadores lo exigen)
 
@@ -491,6 +517,8 @@
         buzz(12);
         break;
       case "sub":
+        // Restar a 0 no hace nada: que no ensucie el historial de deshacer.
+        if (state[target.getAttribute("data-team")] <= 0) return;
         guardarJugada();
         restar(target.getAttribute("data-team"));
         buzz(12);
@@ -504,7 +532,10 @@
         deshacer();
         break;
       case "meta":
-        setMeta(Number(target.getAttribute("data-val")));
+        // Si al bajar a 30 alguien ya ha ganado, que se pueda deshacer.
+        var nuevaMeta = Number(target.getAttribute("data-val"));
+        if (!state.ganador && Math.max(state.nosotros, state.ellos) >= nuevaMeta) guardarJugada();
+        setMeta(nuevaMeta);
         break;
       case "editar":
         state.editando = target.getAttribute("data-team");
@@ -562,6 +593,9 @@
         break;
       default:
         return;
+    }
+    if (CAMBIAN_PANTALLA[action] || (!habiaGanador && state.ganador)) {
+      bloqueoHasta = Date.now() + BLOQUEO_MS;
     }
     render();
   }
