@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Cómo se apuntan los tantos del mus: piedras, amarracos y órdago · Mus</title>
+  <meta name="description" content="Cómo se apuntan los tantos en el mus: qué son las piedras y los amarracos, a cuántos tantos se juega, qué es el órdago y cómo llevar la cuenta con un contador de mus gratis en el móvil." />
+  <link rel="canonical" href="https://mus-contador.vercel.app/como-se-apunta-el-mus.html" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/png" href="./icons/icon-192.png" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Mus" />
+  <meta property="og:title" content="Cómo se apuntan los tantos del mus" />
+  <meta property="og:description" content="Piedras, amarracos, órdago y un contador de mus gratis para la mesa." />
+  <meta property="og:url" content="https://mus-contador.vercel.app/como-se-apunta-el-mus.html" />
+  <meta property="og:image" content="https://mus-contador.vercel.app/og.png" />
+  <meta property="og:locale" content="es_ES" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué son las piedras en el mus?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Las piedras son los tantos del mus. Se llaman así porque tradicionalmente se contaban con piedras, garbanzos o alubias que cada pareja iba pasando a su lado de la mesa." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué es un amarraco?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Un amarraco son 5 tantos (5 piedras). Para contar más rápido, los tantos se agrupan de cinco en cinco: por eso en el contador las rayas se dibujan en grupos de cinco, con la quinta tachando a las otras cuatro." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿A cuántos tantos se juega una partida de mus?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Lo más habitual es jugar a 40 tantos, aunque en muchos sitios se juega a 30. En el contador puedes elegir 30 o 40 en Ajustes." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué es el órdago?",
+        "acceptedAnswer": { "@type": "Answer", "text": "El órdago es un envite de todos los tantos que faltan para ganar. Si la otra pareja lo quiere, quien gane ese lance gana la partida entera. En el contador, el botón Órdago da la partida a esa pareja después de confirmarlo." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué significa apuntar de últimas?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Los envites que se quieren no se cobran al momento: se resuelven al final de la mano, cuando se enseñan las cartas. En el contador se quedan pendientes en la barra De últimas y, al ver, se asignan a la pareja que se los lleva." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿El contador de mus es gratis y funciona sin internet?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sí. Es gratis, no hace falta registrarse y, una vez abierto, funciona sin conexión. La partida se guarda en el móvil aunque cierres la app." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #FFFFFF;
+      --dim: #C9C9C9;
+      --accent: #00CEF2;
+      --red: #F22300;
+      --line: #2A2A2A;
+      --soft: #101010;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); }
+    .doc {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+      padding-top: calc(32px + env(safe-area-inset-top));
+      line-height: 1.65;
+    }
+    .back { display: inline-block; margin-bottom: 24px; color: var(--accent); text-decoration: none; font-size: 14px; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 28px; line-height: 1.25; margin: 0 0 12px; }
+    h2 { font-size: 20px; margin: 40px 0 8px; }
+    h3 { font-size: 16px; margin: 28px 0 4px; }
+    p, li { font-size: 15px; color: var(--dim); }
+    p { margin: 8px 0; }
+    ol { margin: 10px 0; padding-left: 22px; }
+    li { margin: 6px 0; }
+    strong { color: var(--text); }
+    a { color: var(--accent); }
+    .lead { font-size: 17px; color: var(--text); }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 20px 0 8px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+    }
+    .rayas { display: inline-flex; gap: 3px; align-items: flex-end; vertical-align: middle; position: relative; margin: 0 4px; height: 18px; }
+    .rayas i { width: 3px; height: 18px; border-radius: 2px; background: var(--accent); }
+    .rayas b { position: absolute; left: -3px; right: -3px; top: 50%; height: 3px; border-radius: 2px; background: var(--accent); transform: rotate(-24deg); }
+    .foot { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; }
+    .foot a { margin-right: 16px; }
+  </style>
+</head>
+<body>
+  <main class="doc">
+    <a class="back" href="./">&larr; Abrir el contador</a>
+
+    <h1>Cómo se apuntan los tantos del mus</h1>
+    <p class="lead">
+      Un contador de mus gratis para llevar la cuenta en la mesa sin papel, sin piedras y sin
+      discutir quién iba ganando.
+    </p>
+    <p>
+      Sumas y restas tantos con un toque, dejas los envites pendientes hasta ver las cartas
+      y llevas las partidas ganadas de cada pareja. Funciona sin conexión y la partida no se
+      pierde aunque cierres la app.
+    </p>
+    <a class="cta" href="./">Abrir el contador de mus</a>
+
+    <h2>Cómo se usa</h2>
+    <ol>
+      <li><strong>Sumar y restar:</strong> el botón <strong>+</strong> suma un tanto a esa pareja y el <strong>−</strong> lo quita.</li>
+      <li><strong>Envites:</strong> toca el lance (grande, chica, pares, juego o punto), elige las piedras y déjalo pendiente. Al ver las cartas, dale a la pareja que se lo lleva.</li>
+      <li><strong>Órdago:</strong> si se quiere y se gana, el botón Órdago da la partida a esa pareja (te pide confirmación).</li>
+      <li><strong>Deshacer:</strong> la flecha de arriba quita la última jugada si te equivocas.</li>
+      <li><strong>Nombres y meta:</strong> toca el nombre de la pareja para cambiarlo y elige 30 o 40 tantos en Ajustes.</li>
+    </ol>
+
+    <h2>Preguntas frecuentes</h2>
+
+    <h3>¿Qué son las piedras en el mus?</h3>
+    <p>
+      Las piedras son los tantos del mus. Se llaman así porque tradicionalmente se contaban
+      con piedras, garbanzos o alubias que cada pareja iba pasando a su lado de la mesa.
+    </p>
+
+    <h3>¿Qué es un amarraco?</h3>
+    <p>
+      Un amarraco son <strong>5 tantos</strong> (5 piedras). Para contar más rápido, los
+      tantos se agrupan de cinco en cinco: por eso en el contador las rayas se dibujan en
+      grupos de cinco, con la quinta tachando a las otras cuatro
+      <span class="rayas" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></span>.
+    </p>
+
+    <h3>¿A cuántos tantos se juega una partida de mus?</h3>
+    <p>
+      Lo más habitual es jugar a <strong>40 tantos</strong>, aunque en muchos sitios se juega
+      a 30. En el contador puedes elegir 30 o 40 en Ajustes.
+    </p>
+
+    <h3>¿Qué es el órdago?</h3>
+    <p>
+      El órdago es un envite de <strong>todos los tantos que faltan</strong> para ganar. Si la
+      otra pareja lo quiere, quien gane ese lance gana la partida entera. En el contador, el
+      botón Órdago da la partida a esa pareja después de confirmarlo.
+    </p>
+
+    <h3>¿Qué significa apuntar «de últimas»?</h3>
+    <p>
+      Los envites que se quieren no se cobran al momento: se resuelven al final de la mano,
+      cuando se enseñan las cartas. En el contador se quedan pendientes en la barra
+      <strong>De últimas</strong> y, al ver, se asignan a la pareja que se los lleva.
+    </p>
+
+    <h3>¿El contador de mus es gratis y funciona sin internet?</h3>
+    <p>
+      Sí. Es gratis, no hace falta registrarse y, una vez abierto, funciona sin conexión. La
+      partida se guarda en el móvil aunque cierres la app.
+    </p>
+
+    <h3>¿Cómo lo instalo en el móvil?</h3>
+    <p>
+      <strong>Android:</strong> ábrelo en Chrome y toca «Instalar app» o, en el menú ⋮,
+      «Añadir a pantalla de inicio».<br />
+      <strong>iPhone:</strong> ábrelo en Safari, toca el botón de compartir y elige
+      «Añadir a pantalla de inicio».
+    </p>
+
+    <a class="cta" href="./">Abrir el contador de mus</a>
+
+    <nav class="foot">
+      <a href="./privacidad.html">Privacidad</a>
+      <a href="./terminos.html">Términos de uso</a>
+    </nav>
+  </main>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

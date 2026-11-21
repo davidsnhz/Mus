@@ -3,7 +3,7 @@
  * Sube el número de versión al cambiar archivos para forzar actualización.
  */
 
-var CACHE = "mus-contador-v11";
+var CACHE = "mus-contador-v12";
 
 var ASSETS = [
   "./",
@@ -13,6 +13,7 @@ var ASSETS = [
   "./manifest.webmanifest",
   "./privacidad.html",
   "./terminos.html",
+  "./como-se-apunta-el-mus.html",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png"
@@ -42,6 +43,8 @@ self.addEventListener("activate", function (event) {
 
 self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
+  // Las estadísticas de Vercel van siempre a la red (ni se cachean ni se sirven offline)
+  if (new URL(event.request.url).pathname.indexOf("/_vercel/") === 0) return;
 
   event.respondWith(
     caches.match(event.request).then(function (cached) {
