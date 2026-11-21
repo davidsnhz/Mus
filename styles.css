@@ -603,6 +603,11 @@ button {
 }
 .share-btn svg { width: 18px; height: 18px; }
 .share-btn:active { transform: scale(0.98); }
+/* "Enviar una sugerencia": mismo estilo, pegado al de compartir */
+.share-btn:has(+ .suggest-btn) { margin-bottom: 10px; }
+/* En pantallas muy bajas, el panel se desplaza por dentro en vez de cortarse */
+.sheet { max-height: 100dvh; overflow-y: auto; overscroll-behavior: contain; }
+.suggest-btn { text-decoration: none; }
 .settings-links {
   display: flex;
   flex-direction: column;
