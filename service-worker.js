@@ -1,6 +1,5 @@
-/* Service Worker — cachea la app para que funcione sin wifi una vez cargada.
- * Estrategia: cache-first para la app, con red de respaldo.
- * Sube el número de versión al cambiar archivos para forzar actualización.
+/* Service worker: cache-first para que funcione sin wifi una vez cargada.
+ * Acordarse de subir la versión cuando cambie algún archivo.
  */
 
 var CACHE = "mus-contador-v14";

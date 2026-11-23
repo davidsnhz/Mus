@@ -1,6 +1,5 @@
-/* Mus · Contador — lógica de la app (JS puro, sin framework, sin build).
- * Portado del mockup de React manteniendo diseño y comportamiento.
- * El estado se guarda en localStorage por si se cierra el navegador a media partida.
+/* Contador de mus. JS a pelo, sin framework ni build.
+ * La partida se guarda en localStorage por si se cierra el navegador a mitad.
  */
 
 (function () {
@@ -10,7 +9,7 @@
   var LANCES = ["Grande", "Chica", "Pares", "Juego", "Punto"];
   var MAX_HISTORIAL = 30;
 
-  // ---------- Iconos SVG (inline, para funcionar sin conexión) ----------
+  // Iconos SVG (inline, para funcionar sin conexión)
   var ICONS = {
     plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
     minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>',
@@ -31,7 +30,7 @@
     wineDark: "#8A1400"   // Ellos · restar (rojo oscuro)
   };
 
-  // ---------- Estado ----------
+  // Estado
   var state = {
     nosotros: 0,
     ellos: 0,
@@ -87,7 +86,7 @@
     } catch (e) { /* almacenamiento lleno o bloqueado */ }
   }
 
-  // ---------- Historial / deshacer ----------
+  // Historial / deshacer
   // Guarda una foto de lo que cambia con una jugada, antes de aplicarla.
   function snapshot() {
     return {
@@ -118,7 +117,7 @@
     state.ganador = prev.ganador;
   }
 
-  // ---------- Lógica de juego ----------
+  // Lógica de juego
   function comprobarMeta() {
     if (state.nosotros >= state.meta) state.ganador = "nosotros";
     else if (state.ellos >= state.meta) state.ganador = "ellos";
@@ -181,7 +180,7 @@
     comprobarMeta(); // si ya se superó el nuevo objetivo, hay ganador
   }
 
-  // ---------- Dispositivo (vibración, pantalla encendida, compartir) ----------
+  // Dispositivo (vibración, pantalla encendida, compartir)
   // Vibración corta al puntuar (donde el navegador la soporte; iOS no vibra).
   function buzz(ms) {
     try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
@@ -218,7 +217,7 @@
     }
   }
 
-  // ---------- Utilidades de render ----------
+  // Utilidades de render
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -493,7 +492,7 @@
     input.addEventListener("blur", function () { commit(true); });
   }
 
-  // ---------- Eventos (delegación) ----------
+  // Eventos (delegación)
   // Acciones que abren/cierran ventanas o mueven botones de sitio. Justo después
   // ignoramos toques un momento, para que un doble toque no caiga en el botón
   // que aparece debajo (p. ej. "Órdago ganado" -> "Anotar amarraco").
@@ -604,7 +603,7 @@
     render();
   }
 
-  // ---------- Arranque ----------
+  // Arranque
   load();
   document.getElementById("app").addEventListener("click", onClick);
   render();

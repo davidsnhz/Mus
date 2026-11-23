@@ -1,4 +1,4 @@
-/* Mus · Contador — estilos (sin dependencias, todo local para funcionar offline) */
+/* Estilos del contador. Todo local para que funcione offline */
 
 :root {
   --bg: #000000;          /* fondo: negro total */
@@ -67,7 +67,7 @@ button {
 
 .tabnum { font-variant-numeric: tabular-nums; }
 
-/* ---------- Header ---------- */
+/* Header */
 .header {
   display: flex;
   align-items: center;
@@ -142,7 +142,7 @@ button {
   color: #fff;
 }
 
-/* ---------- Barra de progreso ---------- */
+/* Barra de progreso */
 .progress {
   display: flex;
   gap: 8px;
@@ -162,7 +162,7 @@ button {
 }
 .progress .track.right .fill { margin-left: auto; }
 
-/* ---------- Marcador ---------- */
+/* Marcador */
 .board {
   display: flex;
   flex: 1 0 auto;
@@ -315,7 +315,7 @@ button {
   border: 1px solid var(--line);
 }
 
-/* ---------- Rayas ---------- */
+/* Rayas */
 .rayas {
   display: flex;
   flex-wrap: wrap;
@@ -345,7 +345,7 @@ button {
   transform: rotate(-24deg);
 }
 
-/* ---------- Barra de pendientes ---------- */
+/* Barra de pendientes */
 .pendientes {
   padding: 12px 16px;
   display: flex;
@@ -385,7 +385,7 @@ button {
   align-items: center;
 }
 
-/* ---------- Barra de lances ---------- */
+/* Barra de lances */
 .lances {
   padding: 16px;
   display: flex;
@@ -406,7 +406,7 @@ button {
 }
 .lance-btn:active { transform: scale(0.95); }
 
-/* ---------- Modales ---------- */
+/* Modales */
 .overlay {
   position: fixed;
   inset: 0;
@@ -571,7 +571,7 @@ button {
 .confirm-actions .btn-ghost:active { transform: scale(0.98); }
 .confirm-actions .primary-btn { width: auto; flex: 1; }
 
-/* ---------- Panel de ajustes ---------- */
+/* Panel de ajustes */
 .settings-sub {
   margin: 0 0 20px;
   font-size: 12px;

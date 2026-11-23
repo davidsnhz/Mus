@@ -34,11 +34,11 @@ tira sin conexion.
 
 nada raro, es html, css y javascript a pelo, sin frameworks ni cosas que compilar:
 
-- index.html — la pagina
-- app.js — toda la logica
-- styles.css — los estilos
-- manifest.webmanifest — datos de la pwa (nombre, iconos, colores)
-- service-worker.js — lo que hace que funcione sin internet
-- icons/ — los iconos
+- index.html: la pagina
+- app.js: toda la logica
+- styles.css: los estilos
+- manifest.webmanifest: datos de la pwa (nombre, iconos, colores)
+- service-worker.js: lo que hace que funcione sin internet
+- icons/: los iconos
 
 esta en vercel: cada vez que subo un cambio a github se actualiza sola.
