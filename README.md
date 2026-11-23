@@ -40,5 +40,8 @@ nada raro, es html, css y javascript a pelo, sin frameworks ni cosas que compila
 - manifest.webmanifest: datos de la pwa (nombre, iconos, colores)
 - service-worker.js: lo que hace que funcione sin internet
 - icons/: los iconos
+- como-se-apunta-el-mus.html: una guia de como se apunta, por si alguien no se acuerda
+- privacidad.html, terminos.html y aviso-legal.html: lo legal
+- sitemap.xml y robots.txt: para google
 
 esta en vercel: cada vez que subo un cambio a github se actualiza sola.
